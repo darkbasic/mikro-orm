@@ -14,7 +14,7 @@ export function ManyToMany<T extends AnyEntity<T>>(
     options = Utils.isObject<ManyToManyOptions<T>>(entity) ? entity : { ...options, entity, mappedBy };
     options.fixedOrder = options.fixedOrder || !!options.fixedOrderColumn;
 
-    if (!options.owner && !options.inversedBy && !options.mappedBy) {
+    if (!options.owner && !options.mappedBy) {
       options.owner = true;
     }
 

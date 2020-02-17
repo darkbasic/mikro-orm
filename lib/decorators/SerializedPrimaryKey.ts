@@ -9,7 +9,7 @@ export function SerializedPrimaryKey(options: SerializedPrimaryKeyOptions = {}):
     const meta = MetadataStorage.getMetadata(target.constructor.name);
     options.name = propertyName;
     meta.serializedPrimaryKey = propertyName;
-    meta.properties[propertyName] = Object.assign({ reference: ReferenceType.SCALAR }, options) as EntityProperty;
+    meta.properties[propertyName] = Object.assign({ reference: ReferenceType.SCALAR, serializedPrimaryKey: true }, options) as EntityProperty;
     Utils.lookupPathFromDecorator(meta);
   };
 }
