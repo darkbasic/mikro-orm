@@ -1,0 +1,23 @@
+overwrite: true
+schema: './src/schema/typeDefs/*.graphql'
+documents: null
+generates:
+  ./types/graphql.d.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-resolvers'
+    config:
+      contextType: ../src#MyContext
+      mappers:
+        User: ../src/entities/User#UserEntity
+        Site: ../src/entities/Site#SiteEntity
+        Sport: ../src/entities/Sport#SportEntity
+        Specialty: ../src/entities/Specialty#SpecialtyEntity
+        Match: ../src/entities/Match#MatchEntity
+      scalars:
+        Date: Date
+        URL: string
+        EmailAddress: string
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'

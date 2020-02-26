@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  postgre:
+    container_name: postgre12
+    image: postgres:12.2
+    ports:
+      - 5432:5432
+    volumes:
+      - postgre12:/var/lib/postgresql/data
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+
+volumes:
+  postgre12:

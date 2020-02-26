@@ -1,0 +1,881 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Backend should fetch a BIG query 1`] = `
+Object {
+  "specialties": Array [
+    Object {
+      "id": "1",
+      "matches": Array [
+        Object {
+          "date": "2020-03-12T18:00:00.000Z",
+          "id": "1",
+          "partecipants": Array [
+            Object {
+              "createdMatches": Array [
+                Object {
+                  "date": "2020-03-12T18:00:00.000Z",
+                  "id": "1",
+                },
+                Object {
+                  "date": "2020-05-20T16:30:00.000Z",
+                  "id": "2",
+                },
+              ],
+              "id": "1",
+              "name": "Niccolò",
+              "partecipatedMatches": Array [
+                Object {
+                  "date": "2020-03-12T18:00:00.000Z",
+                  "id": "1",
+                },
+                Object {
+                  "date": "2020-05-20T16:30:00.000Z",
+                  "id": "2",
+                },
+              ],
+            },
+            Object {
+              "createdMatches": Array [],
+              "id": "2",
+              "name": "Mario",
+              "partecipatedMatches": Array [
+                Object {
+                  "date": "2020-03-12T18:00:00.000Z",
+                  "id": "1",
+                },
+              ],
+            },
+            Object {
+              "createdMatches": Array [],
+              "id": "4",
+              "name": "Mattia",
+              "partecipatedMatches": Array [
+                Object {
+                  "date": "2020-03-12T18:00:00.000Z",
+                  "id": "1",
+                },
+                Object {
+                  "date": "2020-05-20T16:30:00.000Z",
+                  "id": "2",
+                },
+              ],
+            },
+            Object {
+              "createdMatches": Array [],
+              "id": "6",
+              "name": "Filippo",
+              "partecipatedMatches": Array [
+                Object {
+                  "date": "2020-03-12T18:00:00.000Z",
+                  "id": "1",
+                },
+              ],
+            },
+          ],
+          "site": Object {
+            "id": "1",
+            "name": "The Beach",
+          },
+          "specialty": Object {
+            "id": "1",
+            "name": "2x2 Male",
+          },
+        },
+      ],
+      "name": "2x2 Male",
+      "sport": Object {
+        "id": "1",
+        "name": "Beach Volley",
+        "sites": Array [
+          Object {
+            "id": "1",
+            "matches": Array [
+              Object {
+                "date": "2020-03-12T18:00:00.000Z",
+                "id": "1",
+              },
+              Object {
+                "date": "2020-05-20T16:30:00.000Z",
+                "id": "2",
+              },
+            ],
+            "name": "The Beach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+          Object {
+            "id": "2",
+            "matches": Array [],
+            "name": "Palabeach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+        ],
+        "specialties": Array [
+          Object {
+            "id": "1",
+            "name": "2x2 Male",
+          },
+          Object {
+            "id": "7",
+            "name": "2x2 Female",
+          },
+          Object {
+            "id": "8",
+            "name": "2x2 Mixed",
+          },
+        ],
+      },
+    },
+    Object {
+      "id": "2",
+      "matches": Array [],
+      "name": "1x1 Male",
+      "sport": Object {
+        "id": "2",
+        "name": "Beach Tennis",
+        "sites": Array [
+          Object {
+            "id": "1",
+            "matches": Array [
+              Object {
+                "date": "2020-03-12T18:00:00.000Z",
+                "id": "1",
+              },
+              Object {
+                "date": "2020-05-20T16:30:00.000Z",
+                "id": "2",
+              },
+            ],
+            "name": "The Beach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+          Object {
+            "id": "2",
+            "matches": Array [],
+            "name": "Palabeach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+        ],
+        "specialties": Array [
+          Object {
+            "id": "2",
+            "name": "1x1 Male",
+          },
+          Object {
+            "id": "3",
+            "name": "1x1 Female",
+          },
+          Object {
+            "id": "4",
+            "name": "2x2 Male",
+          },
+          Object {
+            "id": "5",
+            "name": "2x2 Female",
+          },
+          Object {
+            "id": "6",
+            "name": "2x2 Mixed",
+          },
+        ],
+      },
+    },
+    Object {
+      "id": "3",
+      "matches": Array [],
+      "name": "1x1 Female",
+      "sport": Object {
+        "id": "2",
+        "name": "Beach Tennis",
+        "sites": Array [
+          Object {
+            "id": "1",
+            "matches": Array [
+              Object {
+                "date": "2020-03-12T18:00:00.000Z",
+                "id": "1",
+              },
+              Object {
+                "date": "2020-05-20T16:30:00.000Z",
+                "id": "2",
+              },
+            ],
+            "name": "The Beach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+          Object {
+            "id": "2",
+            "matches": Array [],
+            "name": "Palabeach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+        ],
+        "specialties": Array [
+          Object {
+            "id": "2",
+            "name": "1x1 Male",
+          },
+          Object {
+            "id": "3",
+            "name": "1x1 Female",
+          },
+          Object {
+            "id": "4",
+            "name": "2x2 Male",
+          },
+          Object {
+            "id": "5",
+            "name": "2x2 Female",
+          },
+          Object {
+            "id": "6",
+            "name": "2x2 Mixed",
+          },
+        ],
+      },
+    },
+    Object {
+      "id": "4",
+      "matches": Array [],
+      "name": "2x2 Male",
+      "sport": Object {
+        "id": "2",
+        "name": "Beach Tennis",
+        "sites": Array [
+          Object {
+            "id": "1",
+            "matches": Array [
+              Object {
+                "date": "2020-03-12T18:00:00.000Z",
+                "id": "1",
+              },
+              Object {
+                "date": "2020-05-20T16:30:00.000Z",
+                "id": "2",
+              },
+            ],
+            "name": "The Beach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+          Object {
+            "id": "2",
+            "matches": Array [],
+            "name": "Palabeach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+        ],
+        "specialties": Array [
+          Object {
+            "id": "2",
+            "name": "1x1 Male",
+          },
+          Object {
+            "id": "3",
+            "name": "1x1 Female",
+          },
+          Object {
+            "id": "4",
+            "name": "2x2 Male",
+          },
+          Object {
+            "id": "5",
+            "name": "2x2 Female",
+          },
+          Object {
+            "id": "6",
+            "name": "2x2 Mixed",
+          },
+        ],
+      },
+    },
+    Object {
+      "id": "5",
+      "matches": Array [],
+      "name": "2x2 Female",
+      "sport": Object {
+        "id": "2",
+        "name": "Beach Tennis",
+        "sites": Array [
+          Object {
+            "id": "1",
+            "matches": Array [
+              Object {
+                "date": "2020-03-12T18:00:00.000Z",
+                "id": "1",
+              },
+              Object {
+                "date": "2020-05-20T16:30:00.000Z",
+                "id": "2",
+              },
+            ],
+            "name": "The Beach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+          Object {
+            "id": "2",
+            "matches": Array [],
+            "name": "Palabeach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+        ],
+        "specialties": Array [
+          Object {
+            "id": "2",
+            "name": "1x1 Male",
+          },
+          Object {
+            "id": "3",
+            "name": "1x1 Female",
+          },
+          Object {
+            "id": "4",
+            "name": "2x2 Male",
+          },
+          Object {
+            "id": "5",
+            "name": "2x2 Female",
+          },
+          Object {
+            "id": "6",
+            "name": "2x2 Mixed",
+          },
+        ],
+      },
+    },
+    Object {
+      "id": "6",
+      "matches": Array [],
+      "name": "2x2 Mixed",
+      "sport": Object {
+        "id": "2",
+        "name": "Beach Tennis",
+        "sites": Array [
+          Object {
+            "id": "1",
+            "matches": Array [
+              Object {
+                "date": "2020-03-12T18:00:00.000Z",
+                "id": "1",
+              },
+              Object {
+                "date": "2020-05-20T16:30:00.000Z",
+                "id": "2",
+              },
+            ],
+            "name": "The Beach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+          Object {
+            "id": "2",
+            "matches": Array [],
+            "name": "Palabeach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+        ],
+        "specialties": Array [
+          Object {
+            "id": "2",
+            "name": "1x1 Male",
+          },
+          Object {
+            "id": "3",
+            "name": "1x1 Female",
+          },
+          Object {
+            "id": "4",
+            "name": "2x2 Male",
+          },
+          Object {
+            "id": "5",
+            "name": "2x2 Female",
+          },
+          Object {
+            "id": "6",
+            "name": "2x2 Mixed",
+          },
+        ],
+      },
+    },
+    Object {
+      "id": "7",
+      "matches": Array [],
+      "name": "2x2 Female",
+      "sport": Object {
+        "id": "1",
+        "name": "Beach Volley",
+        "sites": Array [
+          Object {
+            "id": "1",
+            "matches": Array [
+              Object {
+                "date": "2020-03-12T18:00:00.000Z",
+                "id": "1",
+              },
+              Object {
+                "date": "2020-05-20T16:30:00.000Z",
+                "id": "2",
+              },
+            ],
+            "name": "The Beach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+          Object {
+            "id": "2",
+            "matches": Array [],
+            "name": "Palabeach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+        ],
+        "specialties": Array [
+          Object {
+            "id": "1",
+            "name": "2x2 Male",
+          },
+          Object {
+            "id": "7",
+            "name": "2x2 Female",
+          },
+          Object {
+            "id": "8",
+            "name": "2x2 Mixed",
+          },
+        ],
+      },
+    },
+    Object {
+      "id": "8",
+      "matches": Array [
+        Object {
+          "date": "2020-05-20T16:30:00.000Z",
+          "id": "2",
+          "partecipants": Array [
+            Object {
+              "createdMatches": Array [
+                Object {
+                  "date": "2020-03-12T18:00:00.000Z",
+                  "id": "1",
+                },
+                Object {
+                  "date": "2020-05-20T16:30:00.000Z",
+                  "id": "2",
+                },
+              ],
+              "id": "1",
+              "name": "Niccolò",
+              "partecipatedMatches": Array [
+                Object {
+                  "date": "2020-03-12T18:00:00.000Z",
+                  "id": "1",
+                },
+                Object {
+                  "date": "2020-05-20T16:30:00.000Z",
+                  "id": "2",
+                },
+              ],
+            },
+            Object {
+              "createdMatches": Array [],
+              "id": "4",
+              "name": "Mattia",
+              "partecipatedMatches": Array [
+                Object {
+                  "date": "2020-03-12T18:00:00.000Z",
+                  "id": "1",
+                },
+                Object {
+                  "date": "2020-05-20T16:30:00.000Z",
+                  "id": "2",
+                },
+              ],
+            },
+            Object {
+              "createdMatches": Array [],
+              "id": "7",
+              "name": "Sara",
+              "partecipatedMatches": Array [
+                Object {
+                  "date": "2020-05-20T16:30:00.000Z",
+                  "id": "2",
+                },
+              ],
+            },
+            Object {
+              "createdMatches": Array [],
+              "id": "9",
+              "name": "Giorgia",
+              "partecipatedMatches": Array [
+                Object {
+                  "date": "2020-05-20T16:30:00.000Z",
+                  "id": "2",
+                },
+              ],
+            },
+          ],
+          "site": Object {
+            "id": "1",
+            "name": "The Beach",
+          },
+          "specialty": Object {
+            "id": "8",
+            "name": "2x2 Mixed",
+          },
+        },
+      ],
+      "name": "2x2 Mixed",
+      "sport": Object {
+        "id": "1",
+        "name": "Beach Volley",
+        "sites": Array [
+          Object {
+            "id": "1",
+            "matches": Array [
+              Object {
+                "date": "2020-03-12T18:00:00.000Z",
+                "id": "1",
+              },
+              Object {
+                "date": "2020-05-20T16:30:00.000Z",
+                "id": "2",
+              },
+            ],
+            "name": "The Beach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+          Object {
+            "id": "2",
+            "matches": Array [],
+            "name": "Palabeach",
+            "sports": Array [
+              Object {
+                "id": "1",
+                "name": "Beach Volley",
+              },
+              Object {
+                "id": "2",
+                "name": "Beach Tennis",
+              },
+            ],
+          },
+        ],
+        "specialties": Array [
+          Object {
+            "id": "1",
+            "name": "2x2 Male",
+          },
+          Object {
+            "id": "7",
+            "name": "2x2 Female",
+          },
+          Object {
+            "id": "8",
+            "name": "2x2 Mixed",
+          },
+        ],
+      },
+    },
+  ],
+}
+`;
+
+exports[`Backend should fetch all specialties and their sport (Many To One) 1`] = `
+Object {
+  "specialties": Array [
+    Object {
+      "id": "1",
+      "name": "2x2 Male",
+      "sport": Object {
+        "id": "1",
+        "name": "Beach Volley",
+      },
+    },
+    Object {
+      "id": "2",
+      "name": "1x1 Male",
+      "sport": Object {
+        "id": "2",
+        "name": "Beach Tennis",
+      },
+    },
+    Object {
+      "id": "3",
+      "name": "1x1 Female",
+      "sport": Object {
+        "id": "2",
+        "name": "Beach Tennis",
+      },
+    },
+    Object {
+      "id": "4",
+      "name": "2x2 Male",
+      "sport": Object {
+        "id": "2",
+        "name": "Beach Tennis",
+      },
+    },
+    Object {
+      "id": "5",
+      "name": "2x2 Female",
+      "sport": Object {
+        "id": "2",
+        "name": "Beach Tennis",
+      },
+    },
+    Object {
+      "id": "6",
+      "name": "2x2 Mixed",
+      "sport": Object {
+        "id": "2",
+        "name": "Beach Tennis",
+      },
+    },
+    Object {
+      "id": "7",
+      "name": "2x2 Female",
+      "sport": Object {
+        "id": "1",
+        "name": "Beach Volley",
+      },
+    },
+    Object {
+      "id": "8",
+      "name": "2x2 Mixed",
+      "sport": Object {
+        "id": "1",
+        "name": "Beach Volley",
+      },
+    },
+  ],
+}
+`;
+
+exports[`Backend should fetch all sports and their specialties (One To Many) 1`] = `
+Object {
+  "sports": Array [
+    Object {
+      "id": "1",
+      "name": "Beach Volley",
+      "specialties": Array [
+        Object {
+          "id": "1",
+          "name": "2x2 Male",
+        },
+        Object {
+          "id": "7",
+          "name": "2x2 Female",
+        },
+        Object {
+          "id": "8",
+          "name": "2x2 Mixed",
+        },
+      ],
+    },
+    Object {
+      "id": "2",
+      "name": "Beach Tennis",
+      "specialties": Array [
+        Object {
+          "id": "2",
+          "name": "1x1 Male",
+        },
+        Object {
+          "id": "3",
+          "name": "1x1 Female",
+        },
+        Object {
+          "id": "4",
+          "name": "2x2 Male",
+        },
+        Object {
+          "id": "5",
+          "name": "2x2 Female",
+        },
+        Object {
+          "id": "6",
+          "name": "2x2 Mixed",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`Backend should fetch all users 1`] = `
+Object {
+  "users": Array [
+    Object {
+      "id": "1",
+      "name": "Niccolò",
+    },
+    Object {
+      "id": "2",
+      "name": "Mario",
+    },
+    Object {
+      "id": "3",
+      "name": "Luigi",
+    },
+    Object {
+      "id": "4",
+      "name": "Mattia",
+    },
+    Object {
+      "id": "5",
+      "name": "Riccardo",
+    },
+    Object {
+      "id": "6",
+      "name": "Filippo",
+    },
+    Object {
+      "id": "7",
+      "name": "Sara",
+    },
+    Object {
+      "id": "8",
+      "name": "Lucia",
+    },
+    Object {
+      "id": "9",
+      "name": "Giorgia",
+    },
+    Object {
+      "id": "10",
+      "name": "Claudia",
+    },
+  ],
+}
+`;

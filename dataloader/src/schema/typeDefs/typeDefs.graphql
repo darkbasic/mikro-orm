@@ -1,0 +1,71 @@
+scalar Date
+scalar URL
+scalar EmailAddress
+
+enum Sex {
+  MALE
+  FEMALE
+}
+
+enum Status {
+  PENDING
+  ACCEPTED
+  DECLINED
+  BLOCKED
+}
+
+type User {
+  id: ID!
+  createdAt: Date!
+  email: EmailAddress!
+  name: String!
+  surname: String!
+  sex: Sex!
+  password: String!
+  picture: URL
+  createdMatches: [Match!]!
+  partecipatedMatches: [Match!]!
+}
+
+type Site {
+  id: ID!
+  createdAt: Date!
+  name: String!
+  position: String!
+  sports: [Sport!]!
+  matches: [Match!]!
+}
+
+type Sport {
+  id: ID!
+  name: String!
+  specialties: [Specialty!]!
+  sites: [Site!]!
+}
+
+type Specialty {
+  id: ID!
+  sport: Sport!
+  name: String!
+  males: Int!
+  females: Int!
+  matches: [Match!]!
+}
+
+type Match {
+  id: ID!
+  createdAt: Date!
+  creator: User!
+  specialty: Specialty!
+  partecipants: [User!]!
+  site: Site!
+  date: Date!
+}
+
+type Query {
+  users: [User!]!
+  sites: [Site!]!
+  sports: [Sport!]!
+  specialties(sportId: ID): [Specialty!]!
+  matches(sportId: ID, specialtyIds: [ID!]): [Match!]!
+}
