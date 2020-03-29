@@ -39,7 +39,7 @@ export interface MyContext extends ApolloContext {
 
   if (process.argv.includes('--add-sample-data')) {
     console.log('Adding sample data...');
-    await addSampleData(orm.em);
+    await addSampleData(orm);
   }
 
   const typeDefs = loadFiles(join(__dirname, 'schema/typeDefs/**/*.graphql'));

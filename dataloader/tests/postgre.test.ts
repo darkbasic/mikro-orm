@@ -2,9 +2,8 @@ import {MikroORM} from 'mikro-orm';
 import {PostgreSqlDriver} from 'mikro-orm/dist/drivers/PostgreSqlDriver';
 import {
   initORMPostgreSql,
-  wipeDatabasePostgreSql,
   createApolloServer,
-  dropSchema,
+  resetDatabase,
 } from './bootstrap';
 import {ApolloServer, gql} from 'apollo-server';
 import {createTestClient} from 'apollo-server-testing';
@@ -94,7 +93,7 @@ describe('Backend', () => {
   `;
 
   beforeAll(async () => (orm = await initORMPostgreSql()));
-  beforeEach(async () => await wipeDatabasePostgreSql(orm.em));
+  beforeEach(async () => await resetDatabase(orm));
 
   test('isConnected()', async () => {
     await expect(orm.isConnected()).resolves.toBe(true);
@@ -246,8 +245,7 @@ describe('Backend', () => {
   });
 
   afterAll(async () => {
-    await wipeDatabasePostgreSql(orm.em);
-    await dropSchema(orm.em);
+    await resetDatabase(orm);
     orm.close(true);
   });
 });

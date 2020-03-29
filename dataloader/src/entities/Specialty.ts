@@ -7,9 +7,9 @@ import {
   IdentifiedReference,
   Reference,
 } from 'mikro-orm';
-import { BaseEntity } from './BaseEntity';
-import { Sport } from './Sport';
-import { Match } from './Match';
+import {BaseEntity} from './BaseEntity';
+import {Sport} from './Sport';
+import {Match} from './Match';
 
 interface SpecialtyConstructor {
   name: string;
@@ -18,11 +18,10 @@ interface SpecialtyConstructor {
   sport: Sport;
 }
 
-export { Specialty as SpecialtyEntity };
+export {Specialty as SpecialtyEntity};
 
 @Entity()
 export class Specialty extends BaseEntity {
-
   @Property()
   name: string;
 
@@ -45,5 +44,4 @@ export class Specialty extends BaseEntity {
     this.females = females;
     this.sport = Reference.create(sport);
   }
-
 }

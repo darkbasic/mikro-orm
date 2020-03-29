@@ -6,8 +6,8 @@ import {
   Collection,
   ManyToMany,
 } from 'mikro-orm';
-import { BaseEntity } from './BaseEntity';
-import { Match } from './Match';
+import {BaseEntity} from './BaseEntity';
+import {Match} from './Match';
 
 export enum Sex {
   MALE,
@@ -23,11 +23,10 @@ interface UserContructor {
   picture?: string;
 }
 
-export { User as UserEntity };
+export {User as UserEntity};
 
 @Entity()
 export class User extends BaseEntity {
-
   @Property()
   email: string;
 
@@ -63,5 +62,4 @@ export class User extends BaseEntity {
       this.picture = picture;
     }
   }
-
 }

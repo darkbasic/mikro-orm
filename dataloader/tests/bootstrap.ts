@@ -1,17 +1,17 @@
-import { MikroORM, EntityManager } from 'mikro-orm';
-import { PostgreSqlDriver } from 'mikro-orm/dist/drivers/PostgreSqlDriver';
-import { BaseEntity } from '../src/entities/BaseEntity';
-import { User } from '../src/entities/User';
-import { Sport } from '../src/entities/Sport';
-import { Specialty } from '../src/entities/Specialty';
-import { Site } from '../src/entities/Site';
-import { Match } from '../src/entities/Match';
-import { IResolvers, makeExecutableSchema } from 'graphql-tools-fork';
-import { ApolloServer } from 'apollo-server';
-import { join } from 'path';
-import { loadFiles } from '@graphql-toolkit/file-loading';
+import {MikroORM} from 'mikro-orm';
+import {PostgreSqlDriver} from 'mikro-orm/dist/drivers/PostgreSqlDriver';
+import {BaseEntity} from '../src/entities/BaseEntity';
+import {User} from '../src/entities/User';
+import {Sport} from '../src/entities/Sport';
+import {Specialty} from '../src/entities/Specialty';
+import {Site} from '../src/entities/Site';
+import {Match} from '../src/entities/Match';
+import {IResolvers, makeExecutableSchema} from 'graphql-tools-fork';
+import {ApolloServer} from 'apollo-server';
+import {join} from 'path';
+import {loadFiles} from '@graphql-toolkit/file-loading';
 import resolvers from '../src/schema/resolvers';
-import { EntityDataLoader } from '../src/schema/datasources/utils';
+import {EntityDataLoader} from '../src/schema/datasources/utils';
 import {
   UserAPI,
   SiteAPI,
@@ -19,8 +19,7 @@ import {
   SpecialtyAPI,
   MatchAPI,
 } from '../src/schema/datasources';
-import { addSampleData } from '../src/db';
-import { PostgreSqlConnection } from 'mikro-orm/dist/connections/PostgreSqlConnection';
+import {addSampleData} from '../src/db';
 
 export async function initORMPostgreSql() {
   const orm = await MikroORM.init<PostgreSqlDriver>({
@@ -28,41 +27,25 @@ export async function initORMPostgreSql() {
     dbName: 'mikro_orm_test',
     type: 'postgresql' as `postgresql`,
     forceUtcTimezone: true,
-    // debug: ['query'],
+    //debug: ['query'],
   });
 
-  await orm.getSchemaGenerator().ensureDatabase();
-  const connection = orm.em.getConnection();
-  await connection.loadFile(__dirname + '/postgre-schema.sql');
+  const generator = orm.getSchemaGenerator();
+  await generator.ensureDatabase();
 
   return orm;
 }
 
-export async function wipeDatabasePostgreSql(em: EntityManager) {
-  await em.getConnection().execute(`set session_replication_role = 'replica'`);
-  await em.createQueryBuilder(User).truncate().execute();
-  await em.createQueryBuilder(Sport).truncate().execute();
-  await em.createQueryBuilder(Specialty).truncate().execute();
-  await em.createQueryBuilder(Site).truncate().execute();
-  await em.createQueryBuilder(Match).truncate().execute();
-  await em.createQueryBuilder('match_to_user').truncate().execute();
-  await em.createQueryBuilder('site_to_sport').truncate().execute();
-  await em.getConnection().execute(`set session_replication_role = 'origin'`);
-  await addSampleData(em);
-  em.clear();
-}
-
-export function dropSchema(em: EntityManager) {
-  const connection = em.getConnection() as PostgreSqlConnection;
-  return connection.loadFile(__dirname + '/postgre-drop-schema.sql');
+export async function resetDatabase(orm: MikroORM<PostgreSqlDriver>) {
+  await addSampleData(orm, true);
 }
 
 export function createApolloServer(
   orm: MikroORM<PostgreSqlDriver>,
-  bypass = true,
+  bypass = true
 ) {
   const typeDefs = loadFiles(
-    join(__dirname, '../src/schema/typeDefs/**/*.graphql'),
+    join(__dirname, '../src/schema/typeDefs/**/*.graphql')
   );
 
   return new ApolloServer({

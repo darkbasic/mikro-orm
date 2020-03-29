@@ -1,13 +1,28 @@
-import {EntityManager, IDatabaseDriver, Connection} from 'mikro-orm';
+import {IDatabaseDriver, Connection, MikroORM} from 'mikro-orm';
 import {User, Sex} from '../entities/User';
 import {Sport} from '../entities/Sport';
 import {Site} from '../entities/Site';
 import {Specialty} from '../entities/Specialty';
 import {Match} from '../entities/Match';
 
-export async function addSampleData(
-  em: EntityManager<IDatabaseDriver<Connection>>
+async function wipeDatabasePostgreSql(
+  orm: MikroORM<IDatabaseDriver<Connection>>,
+  wrap = false
 ) {
+  const generator = orm.getSchemaGenerator();
+
+  await generator.dropSchema(wrap);
+  await generator.createSchema(wrap);
+  orm.em.clear();
+}
+
+export async function addSampleData(
+  orm: MikroORM<IDatabaseDriver<Connection>>,
+  wrap = false
+) {
+  await wipeDatabasePostgreSql(orm, wrap);
+  const {em} = orm;
+
   const sqlUsers = users.map(
     ({email, name, surname, sex, password}) =>
       new User({

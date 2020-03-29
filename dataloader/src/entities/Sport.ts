@@ -1,17 +1,16 @@
-import { Entity, Property, ManyToMany, Collection, OneToMany } from 'mikro-orm';
-import { BaseEntity } from './BaseEntity';
-import { Site } from './Site';
-import { Specialty } from './Specialty';
+import {Entity, Property, ManyToMany, Collection, OneToMany} from 'mikro-orm';
+import {BaseEntity} from './BaseEntity';
+import {Site} from './Site';
+import {Specialty} from './Specialty';
 
 interface SportConstructor {
   name: string;
 }
 
-export { Sport as SportEntity };
+export {Sport as SportEntity};
 
 @Entity()
 export class Sport extends BaseEntity {
-
   @Property()
   name: string;
 
@@ -25,5 +24,4 @@ export class Sport extends BaseEntity {
     super();
     this.name = name;
   }
-
 }
