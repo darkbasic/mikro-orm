@@ -1,7 +1,7 @@
-import {Entity, Property, ManyToMany, Collection, OneToMany} from 'mikro-orm';
-import {BaseEntity} from './BaseEntity';
-import {Sport} from './Sport';
-import {Match} from './Match';
+import { Entity, Property, ManyToMany, Collection, OneToMany } from 'mikro-orm';
+import { BaseEntity } from './BaseEntity';
+import { Sport } from './Sport';
+import { Match } from './Match';
 
 interface SiteConstructor {
   name: string;
@@ -9,10 +9,11 @@ interface SiteConstructor {
   sports: Sport[];
 }
 
-export {Site as SiteEntity};
+export { Site as SiteEntity };
 
 @Entity()
 export class Site extends BaseEntity {
+
   @Property()
   name: string;
 
@@ -22,10 +23,7 @@ export class Site extends BaseEntity {
   @ManyToMany()
   sports: Collection<Sport> = new Collection<Sport>(this);
 
-  @OneToMany(
-    () => Match,
-    match => match.site
-  )
+  @OneToMany(() => Match, match => match.site)
   matches: Collection<Match> = new Collection<Match>(this);
 
   constructor({name, position, sports}: SiteConstructor) {
@@ -34,4 +32,5 @@ export class Site extends BaseEntity {
     this.position = position;
     this.sports.add(...sports);
   }
+
 }

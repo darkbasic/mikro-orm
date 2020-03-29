@@ -6,8 +6,8 @@ import {
   Collection,
   ManyToMany,
 } from 'mikro-orm';
-import {BaseEntity} from './BaseEntity';
-import {Match} from './Match';
+import { BaseEntity } from './BaseEntity';
+import { Match } from './Match';
 
 export enum Sex {
   MALE,
@@ -23,10 +23,11 @@ interface UserContructor {
   picture?: string;
 }
 
-export {User as UserEntity};
+export { User as UserEntity };
 
 @Entity()
 export class User extends BaseEntity {
+
   @Property()
   email: string;
 
@@ -45,16 +46,10 @@ export class User extends BaseEntity {
   @Property()
   picture?: string;
 
-  @OneToMany(
-    () => Match,
-    match => match.creator
-  )
+  @OneToMany(() => Match, match => match.creator)
   createdMatches: Collection<Match> = new Collection<Match>(this);
 
-  @ManyToMany(
-    () => Match,
-    match => match.partecipants
-  )
+  @ManyToMany(() => Match, match => match.partecipants)
   partecipatedMatches: Collection<Match> = new Collection<Match>(this);
 
   constructor({email, name, surname, sex, password, picture}: UserContructor) {
@@ -68,4 +63,5 @@ export class User extends BaseEntity {
       this.picture = picture;
     }
   }
+
 }

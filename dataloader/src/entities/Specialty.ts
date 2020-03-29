@@ -7,9 +7,9 @@ import {
   IdentifiedReference,
   Reference,
 } from 'mikro-orm';
-import {BaseEntity} from './BaseEntity';
-import {Sport} from './Sport';
-import {Match} from './Match';
+import { BaseEntity } from './BaseEntity';
+import { Sport } from './Sport';
+import { Match } from './Match';
 
 interface SpecialtyConstructor {
   name: string;
@@ -18,10 +18,11 @@ interface SpecialtyConstructor {
   sport: Sport;
 }
 
-export {Specialty as SpecialtyEntity};
+export { Specialty as SpecialtyEntity };
 
 @Entity()
 export class Specialty extends BaseEntity {
+
   @Property()
   name: string;
 
@@ -34,10 +35,7 @@ export class Specialty extends BaseEntity {
   @ManyToOne()
   sport: IdentifiedReference<Sport>;
 
-  @OneToMany(
-    () => Match,
-    match => match.specialty
-  )
+  @OneToMany(() => Match, match => match.specialty)
   matches: Collection<Match> = new Collection<Match>(this);
 
   constructor({name, males, females, sport}: SpecialtyConstructor) {
@@ -47,4 +45,5 @@ export class Specialty extends BaseEntity {
     this.females = females;
     this.sport = Reference.create(sport);
   }
+
 }

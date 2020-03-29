@@ -1,7 +1,7 @@
 {
   "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
-    "rootDir": "./",
+    "rootDir": ".",
     "outDir": "build",
     "esModuleInterop": true,
     "lib": ["es2019", "dom"],
