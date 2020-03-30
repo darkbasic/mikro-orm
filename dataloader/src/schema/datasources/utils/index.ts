@@ -8,14 +8,17 @@ import {
   Collection,
   WrappedEntity,
   wrap,
+  EntityRepository,
 } from 'mikro-orm';
 import DataLoader from 'dataloader';
 
 export function ensureIsNum(id: string | number): number;
-export function ensureIsNum(id?: null | string | number): number | undefined;
-export function ensureIsNum(ids: string[] | number[]): number[];
 export function ensureIsNum(
-  ids?: null | string[] | number[]
+  id: string | number | null | undefined
+): number | undefined;
+export function ensureIsNum(ids: Array<string | number>): number[];
+export function ensureIsNum(
+  ids: Array<string | number> | null | undefined
 ): number[] | undefined;
 export function ensureIsNum(
   idOrIds: null | undefined | string | number | (string | number)[]
@@ -121,6 +124,50 @@ function isCol<T>(
   return refOrCol instanceof Collection;
 }
 
+type RepoFind<K> = {
+  repo: EntityRepository<K>;
+  filter: Record<string, Primary<K> | Primary<K>[]>;
+  many: boolean;
+};
+
+type Result<K> = {
+  entityName: string;
+  keys: string[];
+  entitiesOrError: K[] | Error;
+};
+
+function toArray<T>(arrOrAny: T | T[]): T[] {
+  return Array.isArray(arrOrAny) ? arrOrAny : [arrOrAny];
+}
+
+function objectsHaveSameKeys<T>(
+  ...objects: Record<string, Primary<T> | Primary<T>[]>[]
+): boolean {
+  const allKeys = new Set(
+    objects.reduce(
+      (keys, object) => keys.concat(Object.keys(object)),
+      [] as string[]
+    )
+  );
+  return objects.every(object => allKeys.size === Object.keys(object).length);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function arrayAreEqual<T extends Primary<any>[] | string[]>(
+  a: T,
+  b: T
+): boolean {
+  return JSON.stringify(a.sort()) === JSON.stringify(b.sort());
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function arrayIncludes<T extends (string | Primary<any>)[]>(
+  arr: T,
+  target: T
+): boolean {
+  return target.every(v => arr.includes(v));
+}
+
 export function groupPrimaryKeysByEntity<T extends AnyEntity<T>>(
   refs: readonly Reference<T>[]
 ) {
@@ -159,41 +206,73 @@ export function groupInversedOrMappedKeysByEntity<T extends AnyEntity<T>>(
   }, {} as Record<string, Record<string, Primary<T>[]>>);
 }
 
+export function groupFindQueries<T extends AnyEntity<T>>(
+  repoFinds: readonly RepoFind<T>[]
+) {
+  return repoFinds.reduce((acc, {repo, filter}) => {
+    const entityName = repo['entityName'] as string;
+    if (acc[entityName]) {
+      let matchFound = false;
+      const curFilters = acc[entityName].map(el => ({...el}));
+      for (const curFilter of curFilters) {
+        if (objectsHaveSameKeys(curFilter, filter)) {
+          matchFound = true;
+          Object.entries(filter).forEach(([prop, idOrIds]) => {
+            const curIdOrIds = curFilter[prop];
+            if (
+              Array.isArray(curIdOrIds) ||
+              Array.isArray(idOrIds) ||
+              (curIdOrIds && curIdOrIds !== idOrIds)
+            ) {
+              curFilter[prop] = [
+                ...new Set([...toArray(curIdOrIds ?? []), ...toArray(idOrIds)]),
+              ];
+            } else {
+              curFilter[prop] = idOrIds;
+            }
+          });
+          break;
+        }
+      }
+      if (matchFound) {
+        acc[entityName] = [...curFilters];
+      } else {
+        acc[entityName] = [...curFilters, filter];
+      }
+    } else {
+      acc[entityName] = [filter];
+    }
+    return acc;
+  }, {} as Record<string, Record<string, Primary<T> | Primary<T>[]>[]>);
+}
+
 export class EntityDataLoader<T extends Id = Id, K = AnyEntity<T, 'id'>> {
   private bypass: boolean;
   private refLoader: DataLoader<IdentifiedReference<K>, K>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private colLoader: DataLoader<Collection<any>, K[]>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private findLoader: DataLoader<RepoFind<any>, K[] | K | null>;
 
   constructor(em: EntityManager, bypass = false) {
     this.bypass = bypass;
 
     this.refLoader = new DataLoader<IdentifiedReference<K>, K>(async refs => {
       const groupedIds = groupPrimaryKeysByEntity(refs);
-      const promises = Object.entries(groupedIds).map(([entity, ids]) => {
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return em.getRepository<K>(entity).find(ids as any);
-        } catch (e) {
-          return Promise.reject(e as Error);
-        }
-      });
+      const promises = Object.entries(groupedIds).map(([entity, ids]) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        em.getRepository<K>(entity).find(ids as any)
+      );
       await Promise.all(promises);
       return Promise.all(refs.map(async ref => await ref.load()));
     });
 
     this.colLoader = new DataLoader<Collection<K>, K[]>(async collections => {
-      const groupedIds = groupInversedOrMappedKeysByEntity(collections);
-      const promises: Promise<K[]>[] = Object.entries(groupedIds).map(
-        ([entity, record]) => {
-          try {
-            return em
-              .getRepository<K>(entity)
-              .find(record, Object.keys(record));
-          } catch (e) {
-            return Promise.reject(e as Error);
-          }
-        }
+      const groupedKeys = groupInversedOrMappedKeysByEntity(collections);
+      const promises: Promise<K[]>[] = Object.entries(
+        groupedKeys
+      ).map(([entity, record]) =>
+        em.getRepository<K>(entity).find(record, Object.keys(record))
       );
       const results = (await Promise.all(promises))
         .flat()
@@ -224,6 +303,78 @@ export class EntityDataLoader<T extends Id = Id, K = AnyEntity<T, 'id'>> {
         })
       );
     });
+
+    this.findLoader = new DataLoader<RepoFind<K>, K[] | K | null>(
+      async repoFinds => {
+        const groupedKeys = groupFindQueries(repoFinds);
+        const groupedResults: Result<K>[] = await Promise.all(
+          Object.entries(groupedKeys)
+            .map(([entityName, records]) => {
+              return records.map(async record => {
+                let entitiesOrError: K[] | Error;
+                try {
+                  entitiesOrError = await em
+                    .getRepository<K>(entityName)
+                    .find(record, Object.keys(record));
+                } catch (e) {
+                  entitiesOrError = e as Error;
+                }
+                return {
+                  entityName,
+                  keys: Object.keys(record),
+                  entitiesOrError,
+                };
+              });
+            })
+            .flat()
+        );
+
+        return repoFinds.map(({repo, filter, many}) => {
+          const result = groupedResults.find(
+            ({entityName, keys, entitiesOrError}) => {
+              if (
+                entityName === String(repo['entityName']) &&
+                arrayAreEqual(Object.keys(filter), keys)
+              ) {
+                if (!(entitiesOrError instanceof Error)) {
+                  return true;
+                } else {
+                  throw entitiesOrError;
+                }
+              }
+              return false;
+            }
+          );
+          if (!result) {
+            throw new Error('Cannot match results');
+          }
+
+          const {entitiesOrError} = result;
+          if (!(entitiesOrError instanceof Error)) {
+            return (
+              entitiesOrError[many ? 'filter' : 'find'](entity => {
+                for (const key of Object.keys(filter)) {
+                  if (
+                    !arrayIncludes(
+                      toArray(filter[key]),
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      toArray((entity as any)[key]).map(
+                        el => el.id as Primary<K>
+                      )
+                    )
+                  ) {
+                    return false;
+                  }
+                }
+                return true;
+              }) ?? null
+            );
+          } else {
+            throw entitiesOrError;
+          }
+        });
+      }
+    );
   }
 
   load<L extends K>(ref: IdentifiedReference<L>, bypass?: boolean): Promise<L>;
@@ -241,5 +392,29 @@ export class EntityDataLoader<T extends Id = Id, K = AnyEntity<T, 'id'>> {
         ? refOrCol.loadItems()
         : (this.colLoader.load(refOrCol) as Promise<L[]>);
     }
+  }
+
+  find<L extends K>(
+    repo: EntityRepository<L>,
+    filter: Record<string, Primary<L> | Primary<L>[]>,
+    bypass?: boolean
+  ): Promise<L[]> {
+    return bypass ?? this.bypass
+      ? repo.find(filter)
+      : (this.findLoader.load({repo, filter, many: true}) as Promise<L[]>);
+  }
+
+  findOne<L extends K>(
+    repo: EntityRepository<L>,
+    filter: Record<string, Primary<L> | Primary<L>[]>,
+    bypass?: boolean
+  ): Promise<L | null> {
+    return bypass ?? this.bypass
+      ? repo.findOne(filter)
+      : (this.findLoader.load({
+          repo,
+          filter,
+          many: false,
+        }) as Promise<L | null>);
   }
 }
