@@ -197,6 +197,37 @@ describe('Backend', () => {
     expect(diffDataloader).toBeLessThan(diff);
   });
 
+  it('should be able to mix findOne queries on different entities or on the same entity with different filters', async () => {
+    const resultsDataloader = await Promise.all([
+      dataloader.findOne(levelRepo, {sport: 1, user: 2}),
+      dataloader.findOne(levelRepo, {sport: 2, user: 2}),
+      dataloader.findOne(userRepo, {id: 5}),
+      dataloader.findOne(matchRepo, {creator: 10}),
+      dataloader.findOne(matchRepo, {creator: 1, specialty: 3}),
+    ]);
+    expect(resultsDataloader).toBeDefined();
+    expect(resultsDataloader.length).toEqual(5);
+    expect(resultsDataloader).toMatchSnapshot();
+  });
+
+  it('should return the same entities without EntityDataLoader', async () => {
+    const results = await Promise.all([
+      levelRepo.findOne({sport: 1, user: 2}),
+      levelRepo.findOne({sport: 2, user: 2}),
+      userRepo.findOne({id: 5}),
+      matchRepo.findOne({creator: 10}),
+      matchRepo.findOne({creator: 1, specialty: 3}),
+    ]);
+    const resultsDataloader = await Promise.all([
+      dataloader.findOne(levelRepo, {sport: 1, user: 2}),
+      dataloader.findOne(levelRepo, {sport: 2, user: 2}),
+      dataloader.findOne(userRepo, {id: 5}),
+      dataloader.findOne(matchRepo, {creator: 10}),
+      dataloader.findOne(matchRepo, {creator: 1, specialty: 3}),
+    ]);
+    expect(JSON.stringify(results)).toBe(JSON.stringify(resultsDataloader));
+  });
+
   afterAll(async () => {
     orm.close(true);
     await sleep(100);

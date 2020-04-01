@@ -1,5 +1,237 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Backend should be able to mix find queries on different entities or on the same entity with different filters 1`] = `
+Array [
+  Array [
+    Object {
+      "declaredLevel": 5,
+      "id": 1,
+      "sport": Object {
+        "id": 1,
+        "name": "Beach Volley",
+      },
+      "user": 1,
+    },
+    Object {
+      "declaredLevel": 3,
+      "id": 2,
+      "sport": Object {
+        "id": 1,
+        "name": "Beach Volley",
+      },
+      "user": 2,
+    },
+    Object {
+      "declaredLevel": 7,
+      "id": 3,
+      "sport": Object {
+        "id": 1,
+        "name": "Beach Volley",
+      },
+      "user": 4,
+    },
+    Object {
+      "declaredLevel": 4,
+      "id": 4,
+      "sport": Object {
+        "id": 1,
+        "name": "Beach Volley",
+      },
+      "user": 6,
+    },
+    Object {
+      "declaredLevel": 1,
+      "id": 5,
+      "sport": Object {
+        "id": 1,
+        "name": "Beach Volley",
+      },
+      "user": 7,
+    },
+    Object {
+      "declaredLevel": 8,
+      "id": 6,
+      "sport": Object {
+        "id": 1,
+        "name": "Beach Volley",
+      },
+      "user": 9,
+    },
+    Object {
+      "declaredLevel": 1,
+      "id": 11,
+      "sport": Object {
+        "id": 1,
+        "name": "Beach Volley",
+      },
+      "user": 8,
+    },
+    Object {
+      "declaredLevel": 0,
+      "id": 13,
+      "sport": Object {
+        "id": 1,
+        "name": "Beach Volley",
+      },
+      "user": 10,
+    },
+  ],
+  Array [
+    Object {
+      "email": "sara.ricci@linuxsystems.it",
+      "id": 7,
+      "name": "Sara",
+      "password": "7777",
+      "picture": null,
+      "sex": 1,
+      "surname": "Ricci",
+    },
+    Object {
+      "email": "lucia.fontana@linuxsystems.it",
+      "id": 8,
+      "name": "Lucia",
+      "password": "8888",
+      "picture": null,
+      "sex": 1,
+      "surname": "Fontana",
+    },
+    Object {
+      "email": "giorgia.esposito@linuxsystems.it",
+      "id": 9,
+      "name": "Giorgia",
+      "password": "9999",
+      "picture": null,
+      "sex": 1,
+      "surname": "Esposito",
+    },
+    Object {
+      "email": "claudia.recanatini@linuxsystems.it",
+      "id": 10,
+      "name": "Claudia",
+      "password": "0000",
+      "picture": null,
+      "sex": 1,
+      "surname": "Recanatini",
+    },
+  ],
+  Array [
+    Object {
+      "creator": 1,
+      "date": 2020-03-12T18:00:00.000Z,
+      "id": 1,
+      "site": Object {
+        "id": 1,
+        "name": "The Beach",
+        "position": "Falconara Marittima",
+      },
+      "specialty": 1,
+    },
+    Object {
+      "creator": 1,
+      "date": 2020-05-20T16:30:00.000Z,
+      "id": 2,
+      "site": Object {
+        "id": 1,
+        "name": "The Beach",
+        "position": "Falconara Marittima",
+      },
+      "specialty": Object {
+        "females": 2,
+        "id": 3,
+        "males": 2,
+        "name": "2x2 Mixed",
+        "sport": Object {
+          "id": 1,
+          "name": "Beach Volley",
+        },
+      },
+    },
+    Object {
+      "creator": 7,
+      "date": 2020-03-15T18:00:00.000Z,
+      "id": 5,
+      "site": Object {
+        "id": 1,
+        "name": "The Beach",
+        "position": "Falconara Marittima",
+      },
+      "specialty": 2,
+    },
+    Object {
+      "creator": 1,
+      "date": 2020-03-15T18:00:00.000Z,
+      "id": 3,
+      "site": Object {
+        "id": 1,
+        "name": "The Beach",
+        "position": "Falconara Marittima",
+      },
+      "specialty": 1,
+    },
+  ],
+  Array [
+    Object {
+      "creator": 1,
+      "date": 2020-05-20T16:30:00.000Z,
+      "id": 2,
+      "site": Object {
+        "id": 1,
+        "name": "The Beach",
+        "position": "Falconara Marittima",
+      },
+      "specialty": Object {
+        "females": 2,
+        "id": 3,
+        "males": 2,
+        "name": "2x2 Mixed",
+        "sport": Object {
+          "id": 1,
+          "name": "Beach Volley",
+        },
+      },
+    },
+    Object {
+      "creator": 10,
+      "date": 2020-05-19T14:00:00.000Z,
+      "id": 4,
+      "site": 2,
+      "specialty": Object {
+        "females": 2,
+        "id": 3,
+        "males": 2,
+        "name": "2x2 Mixed",
+        "sport": Object {
+          "id": 1,
+          "name": "Beach Volley",
+        },
+      },
+    },
+  ],
+  Array [
+    Object {
+      "creator": 1,
+      "date": 2020-05-20T16:30:00.000Z,
+      "id": 2,
+      "site": Object {
+        "id": 1,
+        "name": "The Beach",
+        "position": "Falconara Marittima",
+      },
+      "specialty": Object {
+        "females": 2,
+        "id": 3,
+        "males": 2,
+        "name": "2x2 Mixed",
+        "sport": Object {
+          "id": 1,
+          "name": "Beach Volley",
+        },
+      },
+    },
+  ],
+]
+`;
+
 exports[`Backend should retrieve parallel find queries with EntityDataLoader 1`] = `
 Array [
   Array [

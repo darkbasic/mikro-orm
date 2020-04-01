@@ -1,7 +1,7 @@
 import {MikroORM, EntityRepository} from 'mikro-orm';
 import {PostgreSqlDriver} from 'mikro-orm/dist/drivers/PostgreSqlDriver';
 import {initORMPostgreSql, resetDatabase} from './bootstrap';
-import {User} from '../src/entities/User';
+import {User, Sex} from '../src/entities/User';
 import {EntityDataLoader} from '../src/schema/datasources/utils';
 import {Level} from '../src/entities/Level';
 import {Match} from '../src/entities/Match';
@@ -204,6 +204,37 @@ describe('Backend', () => {
     console.log(`W/o dataloader: ${diff} ms`);
     console.log(`W/ dataloader: ${diffDataloader} ms`);
     expect(diffDataloader).toBeLessThan(diff);
+  });
+
+  it('should be able to mix find queries on different entities or on the same entity with different filters', async () => {
+    const resultsDataloader = await Promise.all([
+      dataloader.find(levelRepo, {sport: 1}),
+      dataloader.find(userRepo, {sex: Sex.FEMALE}),
+      dataloader.find(matchRepo, {site: 1}),
+      dataloader.find(matchRepo, {specialty: 3}),
+      dataloader.find(matchRepo, {site: 1, specialty: 3}),
+    ]);
+    expect(resultsDataloader).toBeDefined();
+    expect(resultsDataloader.length).toEqual(5);
+    expect(resultsDataloader).toMatchSnapshot();
+  });
+
+  it('should return the same entities without EntityDataLoader', async () => {
+    const results = await Promise.all([
+      levelRepo.find({sport: 1}),
+      userRepo.find({sex: Sex.FEMALE}),
+      matchRepo.find({site: 1}),
+      matchRepo.find({specialty: 3}),
+      matchRepo.find({site: 1, specialty: 3}),
+    ]);
+    const resultsDataloader = await Promise.all([
+      dataloader.find(levelRepo, {sport: 1}),
+      dataloader.find(userRepo, {sex: Sex.FEMALE}),
+      dataloader.find(matchRepo, {site: 1}),
+      dataloader.find(matchRepo, {specialty: 3}),
+      dataloader.find(matchRepo, {site: 1, specialty: 3}),
+    ]);
+    expect(JSON.stringify(results)).toBe(JSON.stringify(resultsDataloader));
   });
 
   afterAll(async () => {

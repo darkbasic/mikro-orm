@@ -1,5 +1,101 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Backend should be able to mix findOne queries on different entities or on the same entity with different filters 1`] = `
+Array [
+  Object {
+    "declaredLevel": 3,
+    "id": 2,
+    "sport": Object {
+      "id": 1,
+      "name": "Beach Volley",
+    },
+    "user": Object {
+      "email": "mario.rossi@linuxsystems.it",
+      "id": 2,
+      "name": "Mario",
+      "password": "2222",
+      "picture": null,
+      "sex": 0,
+      "surname": "Rossi",
+    },
+  },
+  Object {
+    "declaredLevel": 1,
+    "id": 7,
+    "sport": Object {
+      "id": 2,
+      "name": "Beach Tennis",
+    },
+    "user": Object {
+      "email": "mario.rossi@linuxsystems.it",
+      "id": 2,
+      "name": "Mario",
+      "password": "2222",
+      "picture": null,
+      "sex": 0,
+      "surname": "Rossi",
+    },
+  },
+  Object {
+    "email": "riccardo.russo@linuxsystems.it",
+    "id": 5,
+    "name": "Riccardo",
+    "password": "5555",
+    "picture": null,
+    "sex": 0,
+    "surname": "Russo",
+  },
+  Object {
+    "creator": Object {
+      "email": "claudia.recanatini@linuxsystems.it",
+      "id": 10,
+      "name": "Claudia",
+      "password": "0000",
+      "picture": null,
+      "sex": 1,
+      "surname": "Recanatini",
+    },
+    "date": 2020-05-19T14:00:00.000Z,
+    "id": 4,
+    "site": 2,
+    "specialty": Object {
+      "females": 2,
+      "id": 3,
+      "males": 2,
+      "name": "2x2 Mixed",
+      "sport": Object {
+        "id": 1,
+        "name": "Beach Volley",
+      },
+    },
+  },
+  Object {
+    "creator": Object {
+      "email": "niccolo.belli@linuxsystems.it",
+      "id": 1,
+      "name": "Niccolò",
+      "password": "1111",
+      "picture": null,
+      "sex": 0,
+      "surname": "Belli",
+    },
+    "date": 2020-05-20T16:30:00.000Z,
+    "id": 2,
+    "site": 1,
+    "specialty": Object {
+      "females": 2,
+      "id": 3,
+      "males": 2,
+      "name": "2x2 Mixed",
+      "sport": Object {
+        "id": 1,
+        "name": "Beach Volley",
+      },
+    },
+  },
+]
+`;
+
 exports[`Backend should retrieve parallel findOne queries with EntityDataLoader 1`] = `
 Array [
   Object {
