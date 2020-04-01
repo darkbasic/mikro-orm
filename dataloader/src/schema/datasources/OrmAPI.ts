@@ -1,19 +1,22 @@
 import {DataSource, DataSourceConfig} from 'apollo-datasource';
-import {EntityRepository} from 'mikro-orm';
+import {EntityRepository, EntityManager, AbstractSqlDriver} from 'mikro-orm';
 import {ApolloContext} from '../..';
 import {EntityDataLoader} from './utils';
 
 interface OrmAPIContructor<T> {
+  em: EntityManager;
   repo: EntityRepository<T>;
   dataloader: EntityDataLoader;
 }
 
 export class OrmAPI<T> extends DataSource<ApolloContext> {
+  em: EntityManager<AbstractSqlDriver>;
   repo: EntityRepository<T>;
   dataloader: EntityDataLoader;
 
-  constructor({repo, dataloader}: OrmAPIContructor<T>) {
+  constructor({em, repo, dataloader}: OrmAPIContructor<T>) {
     super();
+    this.em = em as EntityManager<AbstractSqlDriver>;
     this.repo = repo;
     this.dataloader = dataloader;
   }

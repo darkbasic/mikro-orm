@@ -20,7 +20,7 @@
     "start:ts-node": "ts-node src/index.ts",
     "prestart": "yarn run compile",
     "start": "node build/src/index.js",
-    "test": "jest",
+    "test": "jest --runInBand",
     "check": "gts check \"src/**/*.ts\" \"tests/**/*.ts\"",
     "clean": "gts clean",
     "precompile": "yarn run clean && yarn run codegen && yarn run fix",
@@ -36,12 +36,12 @@
     "@graphql-codegen/typescript": "^1.13.1",
     "@graphql-codegen/typescript-resolvers": "^1.13.1",
     "@types/jest": "^25.1.4",
-    "@types/node": "^13.9.5",
+    "@types/node": "^13.9.8",
     "apollo-server-testing": "^2.11.0",
     "copyfiles": "^2.2.0",
-    "gts": "^2.0.0-alpha.8",
-    "jest": "^25.2.3",
-    "ts-jest": "^25.2.1",
+    "gts": "^2.0.0-alpha.9",
+    "jest": "^25.2.4",
+    "ts-jest": "^25.3.0",
     "ts-node": "^8.8.1",
     "typescript": "~3.8.3"
   },
@@ -54,8 +54,8 @@
     "graphql-scalars": "^1.0.9",
     "graphql-tools": "^4.0.7",
     "graphql-tools-fork": "^9.0.1",
-    "mikro-orm": "^3.5.2",
-    "pg": "^7.18.2"
+    "mikro-orm": "^3.6.0",
+    "pg": "^8.0.0"
   },
   "jest": {
     "preset": "ts-jest"

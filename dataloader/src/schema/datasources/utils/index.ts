@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {GraphQLResolveInfo} from 'graphql';
 import {
   Reference,
@@ -62,7 +64,6 @@ export function getItemNoPopulate<T>(
   return !info || shouldPopulate(info) ? undefined : ((ref as unknown) as T);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getAllPropertyNames(obj: any) {
   const props: string[] = [];
 
@@ -81,7 +82,6 @@ interface Id {
   id: number | string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function hasRef<T>(
   entity: T
 ): T &
@@ -92,7 +92,6 @@ function hasRef<T>(
     Record<string, IdentifiedReference<AnyEntity>>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function hasCol<T>(
   entity: T
 ): T & WrappedEntity<T, keyof T> & Record<string, Collection<AnyEntity>> {
@@ -117,7 +116,6 @@ function isRef<T>(
   return !(refOrCol instanceof Collection);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function isCol<T>(
   refOrCol: IdentifiedReference<T> | Collection<T>
 ): refOrCol is Collection<T> {
@@ -136,8 +134,12 @@ type Result<K> = {
   entitiesOrError: K[] | Error;
 };
 
-function toArray<T>(arrOrAny: T | T[]): T[] {
-  return Array.isArray(arrOrAny) ? arrOrAny : [arrOrAny];
+function ensureIsArray<T>(colOrArrOrAny: T | T[] | Collection<T>): T[] {
+  return colOrArrOrAny instanceof Collection
+    ? colOrArrOrAny.getItems()
+    : Array.isArray(colOrArrOrAny)
+    ? colOrArrOrAny
+    : [colOrArrOrAny];
 }
 
 function objectsHaveSameKeys<T>(
@@ -152,7 +154,6 @@ function objectsHaveSameKeys<T>(
   return objects.every(object => allKeys.size === Object.keys(object).length);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function arrayAreEqual<T extends Primary<any>[] | string[]>(
   a: T,
   b: T
@@ -160,7 +161,6 @@ function arrayAreEqual<T extends Primary<any>[] | string[]>(
   return JSON.stringify(a.sort()) === JSON.stringify(b.sort());
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function arrayIncludes<T extends (string | Primary<any>)[]>(
   arr: T,
   target: T
@@ -225,7 +225,10 @@ export function groupFindQueries<T extends AnyEntity<T>>(
               (curIdOrIds && curIdOrIds !== idOrIds)
             ) {
               curFilter[prop] = [
-                ...new Set([...toArray(curIdOrIds ?? []), ...toArray(idOrIds)]),
+                ...new Set([
+                  ...ensureIsArray(curIdOrIds ?? []),
+                  ...ensureIsArray(idOrIds),
+                ]),
               ];
             } else {
               curFilter[prop] = idOrIds;
@@ -249,9 +252,7 @@ export function groupFindQueries<T extends AnyEntity<T>>(
 export class EntityDataLoader<T extends Id = Id, K = AnyEntity<T, 'id'>> {
   private bypass: boolean;
   private refLoader: DataLoader<IdentifiedReference<K>, K>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private colLoader: DataLoader<Collection<any>, K[]>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private findLoader: DataLoader<RepoFind<any>, K[] | K | null>;
 
   constructor(em: EntityManager, bypass = false) {
@@ -260,7 +261,6 @@ export class EntityDataLoader<T extends Id = Id, K = AnyEntity<T, 'id'>> {
     this.refLoader = new DataLoader<IdentifiedReference<K>, K>(async refs => {
       const groupedIds = groupPrimaryKeysByEntity(refs);
       const promises = Object.entries(groupedIds).map(([entity, ids]) =>
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         em.getRepository<K>(entity).find(ids as any)
       );
       await Promise.all(promises);
@@ -313,9 +313,13 @@ export class EntityDataLoader<T extends Id = Id, K = AnyEntity<T, 'id'>> {
               return records.map(async record => {
                 let entitiesOrError: K[] | Error;
                 try {
-                  entitiesOrError = await em
-                    .getRepository<K>(entityName)
-                    .find(record, Object.keys(record));
+                  const {properties} = em.getMetadata().get(entityName);
+                  entitiesOrError = await em.getRepository<K>(entityName).find(
+                    record,
+                    Object.keys(record).filter(
+                      key => properties[key].reference !== 'scalar'
+                    )
+                  );
                 } catch (e) {
                   entitiesOrError = e as Error;
                 }
@@ -354,16 +358,28 @@ export class EntityDataLoader<T extends Id = Id, K = AnyEntity<T, 'id'>> {
             return (
               entitiesOrError[many ? 'filter' : 'find'](entity => {
                 for (const key of Object.keys(filter)) {
-                  if (
-                    !arrayIncludes(
-                      toArray(filter[key]),
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      toArray((entity as any)[key]).map(
-                        el => el.id as Primary<K>
+                  const {properties} = em.getMetadata().get(result.entityName);
+                  const idsFromSearchFilter = ensureIsArray(filter[key]);
+                  const idsFromFindResult =
+                    properties[key].reference !== 'scalar'
+                      ? ensureIsArray((entity as any)[key]).map(
+                          el => el.id as Primary<K>
+                        )
+                      : ensureIsArray((entity as any)[key]);
+                  if ((entity as any)[key] instanceof Collection) {
+                    if (
+                      !idsFromFindResult.find(id =>
+                        idsFromSearchFilter.includes(id)
                       )
-                    )
-                  ) {
-                    return false;
+                    ) {
+                      return false;
+                    }
+                  } else {
+                    if (
+                      !arrayIncludes(idsFromSearchFilter, idsFromFindResult)
+                    ) {
+                      return false;
+                    }
                   }
                 }
                 return true;

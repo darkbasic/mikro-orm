@@ -2,14 +2,14 @@ version: '3.4'
 
 services:
   postgre:
-    container_name: postgre12
+    container_name: dataloader
     image: postgres:12.2
     ports:
       - 5432:5432
     volumes:
-      - postgre12:/var/lib/postgresql/data
+      - dataloader:/var/lib/postgresql/data
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
 
 volumes:
-  postgre12:
+  dataloader:

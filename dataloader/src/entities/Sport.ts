@@ -4,6 +4,7 @@ import {Site} from './Site';
 import {Specialty} from './Specialty';
 
 interface SportConstructor {
+  id?: number;
   name: string;
 }
 
@@ -20,8 +21,8 @@ export class Sport extends BaseEntity {
   @OneToMany(() => Specialty, specialty => specialty.sport)
   specialties: Collection<Specialty> = new Collection<Specialty>(this);
 
-  constructor({name}: SportConstructor) {
-    super();
+  constructor({id, name}: SportConstructor) {
+    super({id});
     this.name = name;
   }
 }

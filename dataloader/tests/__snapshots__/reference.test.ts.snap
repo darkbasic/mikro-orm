@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Backend should retrieve parallel references with EntityDataLoader 1`] = `
+Array [
+  Object {
+    "email": "niccolo.belli@linuxsystems.it",
+    "id": 1,
+    "name": "Niccolò",
+    "password": "1111",
+    "picture": null,
+    "sex": 0,
+    "surname": "Belli",
+  },
+  Object {
+    "email": "niccolo.belli@linuxsystems.it",
+    "id": 1,
+    "name": "Niccolò",
+    "password": "1111",
+    "picture": null,
+    "sex": 0,
+    "surname": "Belli",
+  },
+  Object {
+    "email": "claudia.recanatini@linuxsystems.it",
+    "id": 10,
+    "name": "Claudia",
+    "password": "0000",
+    "picture": null,
+    "sex": 1,
+    "surname": "Recanatini",
+  },
+  Object {
+    "email": "sara.ricci@linuxsystems.it",
+    "id": 7,
+    "name": "Sara",
+    "password": "7777",
+    "picture": null,
+    "sex": 1,
+    "surname": "Ricci",
+  },
+  Object {
+    "email": "niccolo.belli@linuxsystems.it",
+    "id": 1,
+    "name": "Niccolò",
+    "password": "1111",
+    "picture": null,
+    "sex": 0,
+    "surname": "Belli",
+  },
+]
+`;

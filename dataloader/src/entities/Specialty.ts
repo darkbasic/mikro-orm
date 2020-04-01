@@ -12,6 +12,7 @@ import {Sport} from './Sport';
 import {Match} from './Match';
 
 interface SpecialtyConstructor {
+  id?: number;
   name: string;
   males: number;
   females: number;
@@ -37,8 +38,8 @@ export class Specialty extends BaseEntity {
   @OneToMany(() => Match, match => match.specialty)
   matches: Collection<Match> = new Collection<Match>(this);
 
-  constructor({name, males, females, sport}: SpecialtyConstructor) {
-    super();
+  constructor({id, name, males, females, sport}: SpecialtyConstructor) {
+    super({id});
     this.name = name;
     this.males = males;
     this.females = females;

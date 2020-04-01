@@ -4,6 +4,7 @@ import {Sport} from './Sport';
 import {Match} from './Match';
 
 interface SiteConstructor {
+  id?: number;
   name: string;
   position: string;
   sports: Sport[];
@@ -25,8 +26,8 @@ export class Site extends BaseEntity {
   @OneToMany(() => Match, match => match.site)
   matches: Collection<Match> = new Collection<Match>(this);
 
-  constructor({name, position, sports}: SiteConstructor) {
-    super();
+  constructor({id, name, position, sports}: SiteConstructor) {
+    super({id});
     this.name = name;
     this.position = position;
     this.sports.add(...sports);

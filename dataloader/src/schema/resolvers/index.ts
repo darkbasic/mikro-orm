@@ -29,6 +29,9 @@ const resolvers: Resolvers & {Sex?: object; Status?: object} = {
     partecipatedMatches(user, args, {dataSources: {UserAPI}}) {
       return UserAPI.getUserPartecipatedMatches(user);
     },
+    level(user, {sportId}, {dataSources: {UserAPI}}) {
+      return UserAPI.getUserLevel(user, sportId);
+    },
   },
 
   Site: {
@@ -70,6 +73,9 @@ const resolvers: Resolvers & {Sex?: object; Status?: object} = {
     },
     site(match, args, {dataSources: {MatchAPI}}, info) {
       return MatchAPI.getMatchSite(match, info);
+    },
+    averageLevel(match, args, {dataSources: {MatchAPI}}) {
+      return MatchAPI.getMatchAverageLevel(match);
     },
   },
 

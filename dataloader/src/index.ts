@@ -57,22 +57,27 @@ export interface MyContext extends ApolloContext {
       const dataloader = new EntityDataLoader(em);
       return {
         UserAPI: new UserAPI({
+          em,
           repo: em.getRepository(User),
           dataloader,
         }),
         SiteAPI: new SiteAPI({
+          em,
           repo: em.getRepository(Site),
           dataloader,
         }),
         SportAPI: new SportAPI({
+          em,
           repo: em.getRepository(Sport),
           dataloader,
         }),
         SpecialtyAPI: new SpecialtyAPI({
+          em,
           repo: em.getRepository(Specialty),
           dataloader,
         }),
         MatchAPI: new MatchAPI({
+          em,
           repo: em.getRepository(Match),
           dataloader,
         }),

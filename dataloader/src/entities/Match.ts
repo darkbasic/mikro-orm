@@ -13,6 +13,7 @@ import {Specialty} from './Specialty';
 import {Site} from './Site';
 
 interface MatchConstructor {
+  id?: number;
   date: Date;
   creator: User;
   specialty: Specialty;
@@ -40,13 +41,14 @@ export class Match extends BaseEntity {
   partecipants: Collection<User> = new Collection<User>(this);
 
   constructor({
+    id,
     date,
     creator,
     specialty,
     site,
     partecipants,
   }: MatchConstructor) {
-    super();
+    super({id});
     this.date = date;
     this.creator = Reference.create(creator);
     this.specialty = Reference.create(specialty);

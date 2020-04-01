@@ -4,6 +4,7 @@ import {Sport} from '../entities/Sport';
 import {Site} from '../entities/Site';
 import {Specialty} from '../entities/Specialty';
 import {Match} from '../entities/Match';
+import {Level} from '../entities/Level';
 
 async function wipeDatabasePostgreSql(
   orm: MikroORM<IDatabaseDriver<Connection>>,
@@ -24,8 +25,9 @@ export async function addSampleData(
   const {em} = orm;
 
   const sqlUsers = users.map(
-    ({email, name, surname, sex, password}) =>
+    ({id, email, name, surname, sex, password}) =>
       new User({
+        id,
         email,
         name,
         surname,
@@ -37,14 +39,27 @@ export async function addSampleData(
     await em.persist(user);
   }
 
-  const sqlSports = sports.map(({name}) => new Sport({name}));
+  const sqlSports = sports.map(({id, name}) => new Sport({id, name}));
   for (const sport of sqlSports) {
     await em.persist(sport);
   }
 
+  const sqlLevels = levels.map(
+    ({userId, sportId, declaredLevel}) =>
+      new Level({
+        user: sqlUsers[userId - 1],
+        sport: sqlSports[sportId - 1],
+        declaredLevel,
+      })
+  );
+  for (const level of sqlLevels) {
+    await em.persist(level);
+  }
+
   const sqlSites = sites.map(
-    ({name, position, sportIds}) =>
+    ({id, name, position, sportIds}) =>
       new Site({
+        id,
         name,
         position,
         sports: sportIds.map(sportId => sqlSports[sportId - 1]),
@@ -55,8 +70,9 @@ export async function addSampleData(
   }
 
   const sqlSpecialties = specialties.map(
-    ({name, males, females, sportId}) =>
+    ({id, name, males, females, sportId}) =>
       new Specialty({
+        id,
         name,
         males,
         females,
@@ -68,8 +84,9 @@ export async function addSampleData(
   }
 
   const sqlMatches = matches.map(
-    ({date, creatorId, specialtyId, siteId, partecipantIds}) =>
+    ({id, date, creatorId, specialtyId, siteId, partecipantIds}) =>
       new Match({
+        id,
         date,
         creator: sqlUsers[creatorId - 1],
         specialty: sqlSpecialties[specialtyId - 1],
@@ -82,6 +99,7 @@ export async function addSampleData(
   }
 
   await em.flush();
+  orm.em.clear();
 }
 
 export type UserDb = {
@@ -93,6 +111,12 @@ export type UserDb = {
   sex: Sex;
   password: string;
   picture?: string;
+};
+
+export type LevelDb = {
+  userId: number;
+  sportId: number;
+  declaredLevel: number;
 };
 
 export type SiteDb = {
@@ -220,6 +244,74 @@ export const users: UserDb[] = [
   },
 ];
 
+export const levels: LevelDb[] = [
+  {
+    userId: 1,
+    sportId: 1,
+    declaredLevel: 5,
+  },
+  {
+    userId: 2,
+    sportId: 1,
+    declaredLevel: 3,
+  },
+  {
+    userId: 4,
+    sportId: 1,
+    declaredLevel: 7,
+  },
+  {
+    userId: 6,
+    sportId: 1,
+    declaredLevel: 4,
+  },
+  {
+    userId: 7,
+    sportId: 1,
+    declaredLevel: 1,
+  },
+  {
+    userId: 9,
+    sportId: 1,
+    declaredLevel: 8,
+  },
+  {
+    userId: 2,
+    sportId: 2,
+    declaredLevel: 1,
+  },
+  {
+    userId: 3,
+    sportId: 2,
+    declaredLevel: 5,
+  },
+  {
+    userId: 5,
+    sportId: 2,
+    declaredLevel: 7,
+  },
+  {
+    userId: 8,
+    sportId: 2,
+    declaredLevel: 9,
+  },
+  {
+    userId: 8,
+    sportId: 1,
+    declaredLevel: 1,
+  },
+  {
+    userId: 10,
+    sportId: 2,
+    declaredLevel: 1,
+  },
+  {
+    userId: 10,
+    sportId: 1,
+    declaredLevel: 0,
+  },
+];
+
 export const sites: SiteDb[] = [
   {
     id: 1,
@@ -327,5 +419,32 @@ export const matches: MatchDb[] = [
     partecipantIds: [1, 4, 7, 9],
     siteId: 1,
     date: new Date(2020, 4, 20, 18, 30),
+  },
+  {
+    id: 3,
+    createdAt: new Date(2020, 2, 14, 9, 0),
+    creatorId: 1,
+    specialtyId: 1,
+    partecipantIds: [1, 2, 3, 4],
+    siteId: 1,
+    date: new Date(2020, 2, 15, 19, 0),
+  },
+  {
+    id: 4,
+    createdAt: new Date(2020, 2, 14, 18, 30),
+    creatorId: 10,
+    specialtyId: 3,
+    partecipantIds: [10, 4, 6, 9],
+    siteId: 2,
+    date: new Date(2020, 4, 19, 16, 0),
+  },
+  {
+    id: 5,
+    createdAt: new Date(2020, 2, 14, 19, 0),
+    creatorId: 7,
+    specialtyId: 2,
+    partecipantIds: [7, 8, 9, 10],
+    siteId: 1,
+    date: new Date(2020, 2, 15, 19, 0),
   },
 ];

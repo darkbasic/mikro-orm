@@ -12,7 +12,7 @@ export class SiteAPI extends OrmAPI<Site> {
     return this.dataloader.load(sports);
   }
 
-  getSiteMatches({matches}: Site): Promise<Match[]> {
-    return this.dataloader.load(matches);
+  async getSiteMatches({matches}: Site): Promise<Match[]> {
+    return (await this.dataloader.load(matches)).sort((a, b) => a.id - b.id);
   }
 }

@@ -25,6 +25,7 @@ type User {
   picture: URL
   createdMatches: [Match!]!
   partecipatedMatches: [Match!]!
+  level(sportId: ID!): Float!
 }
 
 type Site {
@@ -58,6 +59,7 @@ type Match {
   creator: User!
   specialty: Specialty!
   partecipants: [User!]!
+  averageLevel: Float
   site: Site!
   date: Date!
 }

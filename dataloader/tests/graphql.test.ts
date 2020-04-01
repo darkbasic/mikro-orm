@@ -8,6 +8,10 @@ import {
 import {ApolloServer, gql} from 'apollo-server';
 import {createTestClient} from 'apollo-server-testing';
 
+function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 describe('Backend', () => {
   jest.setTimeout(10e3);
   let orm: MikroORM<PostgreSqlDriver>;
@@ -92,8 +96,50 @@ describe('Backend', () => {
     }
   `;
 
-  beforeAll(async () => (orm = await initORMPostgreSql()));
-  beforeEach(async () => await resetDatabase(orm));
+  const findQuery = gql`
+    {
+      matches(sportId: 1) {
+        id
+        averageLevel
+      }
+    }
+  `;
+
+  const findOneQuery = gql`
+    {
+      matches(sportId: 1) {
+        id
+        partecipants {
+          id
+          name
+          level(sportId: 1)
+        }
+      }
+    }
+  `;
+
+  const findAndFindOneQuery = gql`
+    {
+      matches(sportId: 1) {
+        id
+        averageLevel
+        partecipants {
+          id
+          name
+          level(sportId: 1)
+        }
+      }
+    }
+  `;
+
+  beforeAll(async () => {
+    orm = await initORMPostgreSql();
+    await resetDatabase(orm);
+  });
+  beforeEach(async () => {
+    orm.em.clear();
+    await sleep(100);
+  });
 
   test('isConnected()', async () => {
     await expect(orm.isConnected()).resolves.toBe(true);
@@ -244,8 +290,131 @@ describe('Backend', () => {
     expect(diffDataloader).toBeLessThan(diff);
   });
 
+  it('should fetch a query with find() in the resolvers', async () => {
+    server = createApolloServer(orm);
+    const {query} = createTestClient(server);
+    const res = await query({query: findQuery});
+    expect(res.data).toBeDefined();
+    expect(res.errors).toBeUndefined();
+    expect(res.data).toMatchSnapshot();
+  });
+
+  it('should return the same entities with EntityDataLoader', async () => {
+    server = createApolloServer(orm);
+    let {query} = createTestClient(server);
+    const res = await query({query: findQuery});
+    server = createApolloServer(orm, false);
+    query = createTestClient(server).query;
+    const resDataloader = await query({query: findQuery});
+    expect(res.data).toBeDefined();
+    expect(res.errors).toBeUndefined();
+    expect(resDataloader.data).toBeDefined();
+    expect(resDataloader.errors).toBeUndefined();
+    expect(JSON.stringify(resDataloader.data)).toBe(JSON.stringify(res.data));
+  });
+
+  it('should be faster with EntityDataLoader', async () => {
+    server = createApolloServer(orm);
+    let {query} = createTestClient(server);
+    const start = new Date();
+    await query({query: findQuery});
+    const end = new Date();
+    const diff = end.getTime() - start.getTime();
+    server = createApolloServer(orm, false);
+    query = createTestClient(server).query;
+    const startDataloader = new Date();
+    await query({query: findQuery});
+    const endDataloader = new Date();
+    const diffDataloader = endDataloader.getTime() - startDataloader.getTime();
+    console.log(`W/o dataloader: ${diff} ms`);
+    console.log(`W/ dataloader: ${diffDataloader} ms`);
+    expect(diffDataloader).toBeLessThan(diff);
+  });
+
+  it('should fetch a query with findOne() in the resolvers', async () => {
+    server = createApolloServer(orm);
+    const {query} = createTestClient(server);
+    const res = await query({query: findOneQuery});
+    expect(res.data).toBeDefined();
+    expect(res.errors).toBeUndefined();
+    expect(res.data).toMatchSnapshot();
+  });
+
+  it('should return the same entities with EntityDataLoader', async () => {
+    server = createApolloServer(orm);
+    let {query} = createTestClient(server);
+    const res = await query({query: findOneQuery});
+    server = createApolloServer(orm, false);
+    query = createTestClient(server).query;
+    const resDataloader = await query({query: findOneQuery});
+    expect(res.data).toBeDefined();
+    expect(res.errors).toBeUndefined();
+    expect(resDataloader.data).toBeDefined();
+    expect(resDataloader.errors).toBeUndefined();
+    expect(JSON.stringify(resDataloader.data)).toBe(JSON.stringify(res.data));
+  });
+
+  it('should be faster with EntityDataLoader', async () => {
+    server = createApolloServer(orm);
+    let {query} = createTestClient(server);
+    const start = new Date();
+    await query({query: findOneQuery});
+    const end = new Date();
+    const diff = end.getTime() - start.getTime();
+    server = createApolloServer(orm, false);
+    query = createTestClient(server).query;
+    const startDataloader = new Date();
+    await query({query: findOneQuery});
+    const endDataloader = new Date();
+    const diffDataloader = endDataloader.getTime() - startDataloader.getTime();
+    console.log(`W/o dataloader: ${diff} ms`);
+    console.log(`W/ dataloader: ${diffDataloader} ms`);
+    expect(diffDataloader).toBeLessThan(diff);
+  });
+
+  it('should fetch a query with find() and findOne() in the resolvers', async () => {
+    server = createApolloServer(orm);
+    const {query} = createTestClient(server);
+    const res = await query({query: findAndFindOneQuery});
+    expect(res.data).toBeDefined();
+    expect(res.errors).toBeUndefined();
+    expect(res.data).toMatchSnapshot();
+  });
+
+  it('should return the same entities with EntityDataLoader', async () => {
+    server = createApolloServer(orm);
+    let {query} = createTestClient(server);
+    const res = await query({query: findAndFindOneQuery});
+    server = createApolloServer(orm, false);
+    query = createTestClient(server).query;
+    const resDataloader = await query({query: findAndFindOneQuery});
+    expect(res.data).toBeDefined();
+    expect(res.errors).toBeUndefined();
+    expect(resDataloader.data).toBeDefined();
+    expect(resDataloader.errors).toBeUndefined();
+    expect(JSON.stringify(resDataloader.data)).toBe(JSON.stringify(res.data));
+  });
+
+  it('should be faster with EntityDataLoader', async () => {
+    server = createApolloServer(orm);
+    let {query} = createTestClient(server);
+    const start = new Date();
+    await query({query: findAndFindOneQuery});
+    const end = new Date();
+    const diff = end.getTime() - start.getTime();
+    server = createApolloServer(orm, false);
+    query = createTestClient(server).query;
+    const startDataloader = new Date();
+    await query({query: findAndFindOneQuery});
+    const endDataloader = new Date();
+    const diffDataloader = endDataloader.getTime() - startDataloader.getTime();
+    console.log(`W/o dataloader: ${diff} ms`);
+    console.log(`W/ dataloader: ${diffDataloader} ms`);
+    expect(diffDataloader).toBeLessThan(diff);
+  });
+
   afterAll(async () => {
-    await resetDatabase(orm);
     orm.close(true);
+    await sleep(100);
   });
 });

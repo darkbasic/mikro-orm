@@ -15,6 +15,7 @@ export enum Sex {
 }
 
 interface UserContructor {
+  id?: number;
   email: string;
   name: string;
   surname: string;
@@ -51,8 +52,16 @@ export class User extends BaseEntity {
   @ManyToMany(() => Match, match => match.partecipants)
   partecipatedMatches: Collection<Match> = new Collection<Match>(this);
 
-  constructor({email, name, surname, sex, password, picture}: UserContructor) {
-    super();
+  constructor({
+    id,
+    email,
+    name,
+    surname,
+    sex,
+    password,
+    picture,
+  }: UserContructor) {
+    super({id});
     this.email = email;
     this.name = name;
     this.surname = surname;

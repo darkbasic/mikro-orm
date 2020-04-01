@@ -1,12 +1,16 @@
-import {IdEntity, PrimaryKey, Property} from 'mikro-orm';
+import {IdEntity, PrimaryKey} from 'mikro-orm';
+
+interface BaseEntityConstructor {
+  id?: number;
+}
 
 export abstract class BaseEntity implements IdEntity<BaseEntity> {
   @PrimaryKey()
   id!: number;
 
-  @Property()
-  createdAt = new Date();
-
-  @Property({onUpdate: () => new Date()})
-  updatedAt = new Date();
+  constructor({id}: BaseEntityConstructor = {}) {
+    if (id) {
+      this.id = id;
+    }
+  }
 }

@@ -6,6 +6,7 @@ import {Sport} from '../src/entities/Sport';
 import {Specialty} from '../src/entities/Specialty';
 import {Site} from '../src/entities/Site';
 import {Match} from '../src/entities/Match';
+import {Level} from '../src/entities/Level';
 import {IResolvers, makeExecutableSchema} from 'graphql-tools-fork';
 import {ApolloServer} from 'apollo-server';
 import {join} from 'path';
@@ -23,9 +24,9 @@ import {addSampleData} from '../src/db';
 
 export async function initORMPostgreSql() {
   const orm = await MikroORM.init<PostgreSqlDriver>({
-    entities: [BaseEntity, User, Sport, Specialty, Site, Match],
+    entities: [BaseEntity, User, Sport, Specialty, Site, Match, Level],
     dbName: 'mikro_orm_test',
-    type: 'postgresql' as `postgresql`,
+    type: 'postgresql' as 'postgresql',
     forceUtcTimezone: true,
     //debug: ['query'],
   });
@@ -58,22 +59,27 @@ export function createApolloServer(
       const dataloader = new EntityDataLoader(em, bypass);
       return {
         UserAPI: new UserAPI({
+          em,
           repo: em.getRepository(User),
           dataloader,
         }),
         SiteAPI: new SiteAPI({
+          em,
           repo: em.getRepository(Site),
           dataloader,
         }),
         SportAPI: new SportAPI({
+          em,
           repo: em.getRepository(Sport),
           dataloader,
         }),
         SpecialtyAPI: new SpecialtyAPI({
+          em,
           repo: em.getRepository(Specialty),
           dataloader,
         }),
         MatchAPI: new MatchAPI({
+          em,
           repo: em.getRepository(Match),
           dataloader,
         }),
