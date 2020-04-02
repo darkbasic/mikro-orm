@@ -163,9 +163,10 @@ function arrayAreEqual<T extends Primary<any>[] | string[]>(
 
 function arrayIncludes<T extends (string | Primary<any>)[]>(
   arr: T,
-  target: T
+  target: T,
+  type: 'every' | 'any'
 ): boolean {
-  return target.every(v => arr.includes(v));
+  return !!target[type === 'every' ? 'every' : 'find'](v => arr.includes(v));
 }
 
 export function groupPrimaryKeysByEntity<T extends AnyEntity<T>>(
@@ -366,20 +367,16 @@ export class EntityDataLoader<T extends Id = Id, K = AnyEntity<T, 'id'>> {
                           el => el.id as Primary<K>
                         )
                       : ensureIsArray((entity as any)[key]);
-                  if ((entity as any)[key] instanceof Collection) {
-                    if (
-                      !idsFromFindResult.find(id =>
-                        idsFromSearchFilter.includes(id)
-                      )
-                    ) {
-                      return false;
-                    }
-                  } else {
-                    if (
-                      !arrayIncludes(idsFromSearchFilter, idsFromFindResult)
-                    ) {
-                      return false;
-                    }
+                  if (
+                    !arrayIncludes(
+                      idsFromSearchFilter,
+                      idsFromFindResult,
+                      (entity as any)[key] instanceof Collection
+                        ? 'any'
+                        : 'every'
+                    )
+                  ) {
+                    return false;
                   }
                 }
                 return true;
