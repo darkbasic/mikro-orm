@@ -1,47 +1,15 @@
-version: "3.4"
+version: '3.4'
 
 services:
-  # mongodb is managed via `run-rs`
-
-  mysql:
-    image: mysql:5.7
-    platform: linux/x86_64
-    restart: unless-stopped
-    ports:
-      - 3307:3306
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
-    volumes:
-      - mysql:/var/lib/mysql
-
-  mariadb:
-    image: mariadb:10.6
-    ports:
-      - 3309:3306
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
-    volumes:
-      - mariadb:/var/lib/mysql
-
   postgre:
-    image: postgres:13.3
+    container_name: postgis-13-3.1
+    image: postgis/postgis:13-3.1
     ports:
-      - 5432:5432
+      - 5433:5432
     volumes:
-      - postgre:/var/lib/postgresql/data
+      - postgis1331:/var/lib/postgresql/data
     environment:
-      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_PASSWORD: 'postgres'
 
 volumes:
-  mysql:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  mariadb:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  postgre:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
+  postgis1331:

@@ -1,7 +1,0 @@
-{
-  "extends": "../tsconfig.json", /* omg */
-  "include": ["**/*", "../packages/*/src/**/*"],
-  "compilerOptions": {
-    "sourceMap": true
-  }
-}
